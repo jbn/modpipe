@@ -94,23 +94,6 @@ def _load_pipeline_seq(module, elide_helpers=True):
     return pipeline_seq
 
 
-def call_reconciled(n, f, args):
-    # XXX: Ugly.
-    if isinstance(args, tuple):
-        k = len(args)
-
-        if n == k:
-            return f(*args)
-        elif k == 0:
-            return f()
-        else:
-            return f(args)
-    elif args is None:
-        return f()
-    else:
-        return f(args)
-
-
 class ModPipe:
 
     @classmethod
@@ -157,43 +140,55 @@ class ModPipe:
         return False   # Don't swallow.
 
     def __call__(self, *args):
-        skip_until = None
+        res = Result(args)
 
-        res = args
         for k, f in self._pipeline.items():
 
-            if skip_until is not None:
-                if f is not skip_until.f:
-                    continue
-                else:
-                    res, skip_until = skip_until.args, None
+            res = res.apply_to(f, self._expected_args[f])
 
-            res = call_reconciled(self._expected_args[f], f, res)
-
-            # Done as a monad?
             if isinstance(res, Done):
-                if isinstance(res.args, tuple) and len(res.args) == 1:
-                    return res.args[0]
-                else:
-                    return res.args
-            elif isinstance(res, SkipTo):
-                skip_until = res
+                break
 
-        return res
+        if isinstance(res, SkipTo):
+            msg = "Pipeline ended before encountering {}"
+            raise RuntimeError(msg.format(res.target_f.__name__))
+
+        return res.args
 
 
 class Result:
 
     def __init__(self, *args):
-        self.args = args
+        if len(args) == 1 and isinstance(args, tuple):
+            self.args = args[0]
+        else:
+            self.args = args
+
+    def apply_to(self, f, arity):
+        res = None
+
+        if isinstance(self.args, tuple) and arity == len(self.args):
+            res = f(*self.args)
+        else:
+            res = f(self.args)
+
+        return res if isinstance(res, Result) else Result(res)
 
 
 class Done(Result):
-    pass
+
+    def apply_to(self, f, arity):
+        raise RuntimeError("Calling apply to on a completed result.")
 
 
 class SkipTo(Result):
 
-    def __init__(self, f, *args):
+    def __init__(self, target_f, *args):
         super().__init__(*args)
-        self.f = f
+        self.target_f = target_f
+
+    def apply_to(self, f, arity):
+        if f != self.target_f:
+            return self
+        else:
+            return Result.apply_to(self, f, arity)

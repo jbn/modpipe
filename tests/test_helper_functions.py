@@ -6,8 +6,7 @@ from modpipe.modpipe import (_defined_in,
                              _remove_from_pipeline_seq,
                              _sequence_objects,
                              _compile_signatures,
-                             _load_pipeline_seq,
-                             call_reconciled)
+                             _load_pipeline_seq)
 from tests import math_mod
 from collections import OrderedDict
 
@@ -76,9 +75,3 @@ def test_load_pipeline_seq():
     pipeline_seq = _load_pipeline_seq(math_mod)
 
     assert list(pipeline_seq) == ['normed', 'rot90', 'times_ten']
-
-
-def test_call_reconciled_basic():
-    res = call_reconciled(2, math_mod.normed, (3, 4))
-    assert res[0] == pytest.approx(0.6)
-    assert res[1] == pytest.approx(0.8)

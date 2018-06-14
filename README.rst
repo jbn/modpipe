@@ -53,6 +53,15 @@ Simplifying assumptions
 
 I'm sure this is going to bite me in the ass, but if you return a tuple from a function and that tuple's size matches the arity of the next function in the pipeline, it does ``f(*res)``. Otherwise, it does f(res). Keyword arguments don't work. 
 
+Tuples are special.
+
+* If your transformer returns anything but a tuple, it's assumed to be the single argument to the next transformer.
+
+* If your transformer returns a tuple AND if the length of that tuple matches the arity of the next transformer, the star-expanded (i.e. ``f2(*args)``.
+
+* If your transformer returns a tuple AND the length of that tuple DOES NOT match the arity of the next transformer, it's applied as the single argument to the next transformer.
+
+- The star-expansion rules don't apply to lists. They only apply to tuples. 
 Misc
 ----
 
