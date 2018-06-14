@@ -1,4 +1,4 @@
-from modpipe.modpipe import ModPipe, Done, SkipTo
+from modpipe.modpipe_impl import ModPipe, Done, SkipTo
 
 
 __author__ = """John Bjorn Nelson"""

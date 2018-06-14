@@ -1,12 +1,12 @@
 import pytest
-from modpipe.modpipe import (_defined_in,
-                             _pipelineable,
-                             _is_simple_callable,
-                             _is_pseudo_private,
-                             _remove_from_pipeline_seq,
-                             _sequence_objects,
-                             _compile_signatures,
-                             _load_pipeline_seq)
+from modpipe.modpipe_impl import (_defined_in,
+                                  _pipelineable,
+                                  _is_simple_callable,
+                                  _is_pseudo_private,
+                                  _remove_from_pipeline_seq,
+                                  _sequence_objects,
+                                  _compile_signatures,
+                                  _load_pipeline_seq)
 from tests import math_mod
 from collections import OrderedDict
 

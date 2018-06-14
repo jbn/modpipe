@@ -62,6 +62,12 @@ Tuples are special.
 * If your transformer returns a tuple AND the length of that tuple DOES NOT match the arity of the next transformer, it's applied as the single argument to the next transformer.
 
 - The star-expansion rules don't apply to lists. They only apply to tuples. 
+
+Requirements
+------------
+
+funcsigs for 2.7
+
 Misc
 ----
 

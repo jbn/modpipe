@@ -1,5 +1,5 @@
 import pytest
-from modpipe.modpipe import Result, Done, SkipTo
+from modpipe.modpipe_impl import Result, Done, SkipTo
 
 
 def test_single_arg_result():

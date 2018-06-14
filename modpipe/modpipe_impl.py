@@ -1,7 +1,16 @@
 import re
-from importlib import import_module, reload
-from inspect import getmodule, getsourcelines, getsource, signature
+from importlib import import_module
+from inspect import getmodule, getsourcelines, getsource
 from collections import OrderedDict
+
+try:
+    from importlib import reload
+except ImportError:
+    try:
+        from imp import reload
+    except ImportError:
+        pass  # Assuming 2.7
+
 
 
 def _defined_in(module):
@@ -9,8 +18,20 @@ def _defined_in(module):
     return (pair for pair in pairs if getmodule(pair[1]) == module)
 
 
-def _is_simple_callable(obj):
-    return callable(obj) and not isinstance(obj, type)
+try:
+    from inspect import signature
+
+    def _is_simple_callable(obj):
+        return callable(obj) and not isinstance(obj, type)
+except ImportError:
+    from funcsigs import signature as _signature
+    from types import TypeType, ClassType, InstanceType
+
+    def _is_simple_callable(obj):
+        return callable(obj) and not isinstance(obj, (TypeType, ClassType))
+
+    def signature(f):
+        return _signature(f.__call__ if isinstance(f, InstanceType) else f)
 
 
 def _pipelineable(pairs):
@@ -156,7 +177,7 @@ class ModPipe:
         return res.args
 
 
-class Result:
+class Result(object):
 
     def __init__(self, *args):
         if len(args) == 1 and isinstance(args, tuple):
@@ -184,7 +205,7 @@ class Done(Result):
 class SkipTo(Result):
 
     def __init__(self, target_f, *args):
-        super().__init__(*args)
+        super(SkipTo, self).__init__(*args)
         self.target_f = target_f
 
     def apply_to(self, f, arity):
