@@ -56,12 +56,23 @@ def test_compile_signatures():
     def h(x):
         pass
 
+    def f_prime(a, b):
+        pass
+
     # Only one callable.
     _compile_signatures({'f': f})
 
     # Two callables with the same signature.
     tbl = {func.__name__: func for func in [f, g]}
     _compile_signatures(tbl)
+
+    # Two callables with the same signature different names.
+    tbl = {func.__name__: func for func in [f, f_prime]}
+    _compile_signatures(tbl)
+
+    # Two callables with the same signature different names.
+    with pytest.raises(RuntimeError):
+        _compile_signatures(tbl, ignore_names=False)
 
     # Three with a heterogeneous signature.
     with pytest.raises(RuntimeError) as e:
