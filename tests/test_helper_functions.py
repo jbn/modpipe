@@ -72,12 +72,12 @@ def test_compile_signatures():
 
     # Two callables with the same signature different names.
     with pytest.raises(RuntimeError):
-        _compile_signatures(tbl, ignore_names=False)
+        _compile_signatures(tbl, assert_unif=True, ignore_names=False)
 
     # Three with a heterogeneous signature.
     with pytest.raises(RuntimeError) as e:
         tbl = OrderedDict([(func.__name__, func) for func in [h, f, g]])
-        _compile_signatures(tbl)
+        _compile_signatures(tbl, assert_unif=True)
 
     e.match("Signature for f is \(x, y\) which doesn't match \(x\)")
 

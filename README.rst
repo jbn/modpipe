@@ -40,7 +40,7 @@ in ``ingest_pipeline.py``. When the following code runs,
    import modpipe
 
    with modpipe.ModPipe.on('ingest_pipeline') as f:
-        clean_items = [f(item) for item in raw_items]
+       clean_items = [f(item) for item in raw_items]
 
 it automatically re/loads the ``ingest_pipeline`` module, sythesizing a 
 composition ordered by source code line position. That's a mouth full. 
@@ -103,7 +103,7 @@ ones you really want in the linearized pipeline.
 .. code-block:: python
    
    def _encode_as_binary(x):  # Not in pipeline by default!
-       return bin(123)[2:].rjust(32, '0')
+       return bin(x)[2:].rjust(32, '0')
 
    def convert_seeds(seeds):
        return [_encode_as_binary(seed) for seed in seeds]
@@ -128,7 +128,7 @@ numeric type as given.
    def sqrt(x):
        return type(x)(x ** 0.5)
    
-   assert sqrt(1776) == 42, "Uh oh!"  # Fails loudly!
+   assert sqrt(1776) == 42, "Uh oh!"  # Fails loudly if bad code!
 
 
 ~~~~~~~~~~~~~~~~~~
@@ -162,7 +162,7 @@ value for both cases.
        else:
            return Done(None)  # Nothing can be done! Abort!
 
-    def extract_title(d):
+   def extract_title(d):
        for title in d['doc'].xpath("//title/text()"):
            d['title'] = title
 
@@ -171,10 +171,10 @@ value for both cases.
        else:
            return d
 
-    def extract_headers(d):
+   def extract_headers(d):
         d['headers'] = d['doc'].xpath('//h1/text()')
 
-    def cleanup(d):
+   def cleanup(d):
         del d['doc']
 
 

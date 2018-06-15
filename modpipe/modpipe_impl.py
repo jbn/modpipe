@@ -79,9 +79,9 @@ def _sequence_objects(module, items):
     return sorted(items, key=lambda p: linenos[p[0]])
 
 
-def _compile_signatures(pipeline_seq, assert_uniform=False, ignore_names=True):
+def _compile_signatures(pipeline_seq, assert_unif=False, ignore_names=True):
     """
-    :param assert_uniform: if True raises a runtime if all the functions
+    :param assert_unif: if True raises a runtime if all the functions
         don't share the same signature.
     :param ignore_names: if True, then the uniform assertion ignores name
         differences
@@ -98,14 +98,15 @@ def _compile_signatures(pipeline_seq, assert_uniform=False, ignore_names=True):
         def equal_sigs(a, b):
             return a == b
 
-    last = None
-    for f, sig in signatures:
-        # The order is important! It's easier to debug with the first
-        # inconsistency than an arbitrary one.
-        if last is not None and not equal_sigs(last, sig):
-            msg = "Signature for {} is {} which doesn't match {}"
-            raise RuntimeError(msg.format(f.__name__, sig, last))
-        last = sig
+    if assert_unif:
+        last = None
+        for f, sig in signatures:
+            # The order is important! It's easier to debug with the first
+            # inconsistency than an arbitrary one.
+            if last is not None and not equal_sigs(last, sig):
+                msg = "Signature for {} is {} which doesn't match {}"
+                raise RuntimeError(msg.format(f.__name__, sig, last))
+            last = sig
 
     return dict(signatures)
 
@@ -128,13 +129,12 @@ def _load_pipeline_seq(module, elide_helpers=True):
 class ModPipe:
 
     @classmethod
-    def on(cls, module_dot_path, ensure_uniform_sigs=False, ignore_names=True):
-        return ModPipe(module_dot_path, ensure_uniform_sigs)
+    def on(cls, module_dot_path, unif_sigs=False, ignore_names=True):
+        return ModPipe(module_dot_path, unif_sigs, ignore_names)
 
-    def __init__(self, module_dot_path, ensure_uniform_sigs=False,
-                 ignore_names=True):
+    def __init__(self, module_dot_path, unif_sigs=False, ignore_names=True):
         self._module = import_module(module_dot_path)
-        self._ensure_uniform_sigs = ensure_uniform_sigs
+        self._unif_sigs = unif_sigs
         self._ignore_names = ignore_names
 
         self.reload()
@@ -146,7 +146,7 @@ class ModPipe:
         assert len(self._pipeline) > 0
 
         self._signatures = _compile_signatures(self._pipeline,
-                                               self._ensure_uniform_sigs,
+                                               self._unif_sigs,
                                                self._ignore_names)
         self._expected_args = {k: len(sig.parameters)
                                for k, sig in self._signatures.items()}
