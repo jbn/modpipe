@@ -1,12 +1,11 @@
 .. image:: https://img.shields.io/pypi/v/modpipe.svg
         :target: https://pypi.python.org/pypi/modpipe
-
 .. image:: https://img.shields.io/travis/jbn/modpipe.svg
         :target: https://travis-ci.org/jbn/modpipe
-
-.. image:: https://readthedocs.org/projects/modpipe/badge/?version=latest
-        :target: https://modpipe.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+.. image:: https://ci.appveyor.com/api/projects/status/21l6df8evjepq41s?svg=true 
+        :target: https://ci.appveyor.com/project/jbn/modpipe/branch/master 
+.. image:: https://coveralls.io/repos/github/jbn/modpipe/badge.svg?branch=master
+        :target: https://coveralls.io/github/jbn/modpipe?branch=master
 
 
 =============================

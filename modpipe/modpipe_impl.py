@@ -12,7 +12,6 @@ except ImportError:
         pass  # Assuming 2.7
 
 
-
 def _defined_in(module):
     pairs = vars(module).items()
     return (pair for pair in pairs if getmodule(pair[1]) == module)

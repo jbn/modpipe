@@ -1,0 +1,20 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27"
+      TOX_ENV: "py27"
+
+    - PYTHON: "C:\\Python35"
+      TOX_ENV: "py35"
+
+    - PYTHON: "C:\\Python36"
+      TOX_ENV: "py36"
+
+
+install:
+  - "%PYTHON%/Scripts/easy_install -U pip"
+  - "%PYTHON%/Scripts/pip install tox wheel funcsigs"
+
+build: false  # Not a C# project, build stuff at the test step instead.
+
+test_script:
+  - "%PYTHON%/Scripts/tox -e %TOX_ENV%"
