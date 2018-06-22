@@ -7,7 +7,7 @@ from modpipe.modpipe_impl import (_defined_in,
                                   _sequence_objects,
                                   _compile_signatures,
                                   _load_pipeline_seq)
-from tests import math_mod
+from tests.examples import math_mod
 from collections import OrderedDict
 
 

@@ -1,6 +1,6 @@
 import re
 from importlib import import_module
-from inspect import getmodule, getsourcelines, getsource
+from inspect import getmodule, getsourcelines, getsource, getfile
 from collections import OrderedDict
 
 try:
@@ -133,15 +133,26 @@ class ModPipe:
         return ModPipe(module_dot_path, unif_sigs, ignore_names)
 
     def __init__(self, module_dot_path, unif_sigs=False, ignore_names=True):
-        self._module = import_module(module_dot_path)
+        self._module_dot_path = module_dot_path
         self._unif_sigs = unif_sigs
         self._ignore_names = ignore_names
 
         self.reload()
 
+    @property
+    def module_name(self):
+        return self._module_name
+
+    @property
+    def abs_module_path(self):
+        return self._module_path
+
     def reload(self):
-        self._module = reload(self._module)
-        self._pipeline = _load_pipeline_seq(self._module)
+        # Don't save a ref to module. It's not picklable.
+        module = reload(import_module(self._module_dot_path))
+        self._module_name = module.__name__
+        self._module_path = getfile(module)
+        self._pipeline = _load_pipeline_seq(module)
 
         assert len(self._pipeline) > 0
 
