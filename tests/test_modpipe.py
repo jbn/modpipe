@@ -36,9 +36,11 @@ def test_name(math_pipeline):
 
 
 def test_abs_module_path(math_pipeline):
+    def stripped_pyc(s):
+        return s[:-1] if s.lower().endswith(".pyc") else s
     dir_path = os.path.dirname(os.path.realpath(__file__))
     expected_path = os.path.join(dir_path, "examples", "math_mod.py")
-    assert math_pipeline.abs_module_path == expected_path
+    assert stripped_pyc(math_pipeline.abs_module_path) == expected_path
 
 
 def test_is_picklable(math_pipeline):
