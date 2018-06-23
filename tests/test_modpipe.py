@@ -1,5 +1,6 @@
 import os
 import pytest
+import pickle
 
 from modpipe import ModPipe
 
@@ -38,3 +39,7 @@ def test_abs_module_path(math_pipeline):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     expected_path = os.path.join(dir_path, "examples", "math_mod.py")
     assert math_pipeline.abs_module_path == expected_path
+
+
+def test_is_picklable(math_pipeline):
+    pickle.dumps(math_pipeline)
