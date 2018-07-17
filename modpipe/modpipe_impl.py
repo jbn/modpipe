@@ -217,7 +217,12 @@ class Result(object):
         else:
             res = f(self.args)
 
-        return res if isinstance(res, Result) else Result(res)
+        if isinstance(res, Result):
+            return res
+        elif res is not None:
+            return Result(res)
+        else:
+            return Result(self.args)
 
 
 class Done(Result):
