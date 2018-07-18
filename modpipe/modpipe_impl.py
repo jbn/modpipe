@@ -175,7 +175,7 @@ class ModPipe:
         return list(self._pipeline.keys())
 
     def __repr__(self):
-        return "ModPipe({})".format(self._module.__name__)
+        return "ModPipe({})".format(self._module_name)
 
     def __enter__(self):
         self.reload()
