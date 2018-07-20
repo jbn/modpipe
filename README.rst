@@ -2,8 +2,6 @@
         :target: https://pypi.python.org/pypi/modpipe
 .. image:: https://img.shields.io/travis/jbn/modpipe.svg
         :target: https://travis-ci.org/jbn/modpipe
-.. image:: https://ci.appveyor.com/api/projects/status/21l6df8evjepq41s?svg=true 
-        :target: https://ci.appveyor.com/project/jbn/modpipe/branch/master 
 .. image:: https://coveralls.io/repos/github/jbn/modpipe/badge.svg?branch=master
         :target: https://coveralls.io/github/jbn/modpipe?branch=master
 
@@ -17,6 +15,23 @@ What is this?
 --------------
 
 An opinionated package that loads a module as a callable pipeline.
+
+------------
+Installation
+------------
+
+.. code-block:: bash
+   
+   pip install modpipe
+
+   # For Python 2.7, also do,
+   pip install git+git://github.com/jbn/funcsigs.git@214840c53529f019638229d72dcf2257fe154458
+
+Python 2.7 requires the `functools <https://github.com/aliles/funcsigs>`_ 
+backport. But, the current master branch doesn't have support for pickling.
+Until my `PR <https://github.com/aliles/funcsigs/pull/33>`_ gets
+accepted, the pypi package won't work in spark environments. the above pip
+command will install my branch.
 
 -------------
 Why is this?

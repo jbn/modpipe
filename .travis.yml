@@ -3,21 +3,24 @@ language: python
 matrix:
     include:
       - python: 2.7
-        env: TOX_ENV=py27
+        env: TOX_ENV=py27 DOCOV=false
       - python: 3.5
-        env: TOX_ENV=py35
+        env: TOX_ENV=py35 DOCOV=true
       - python: 3.6
-        env: TOX_ENV=py36
+        env: TOX_ENV=py36 DOCOV=false
       - python: pypy
-        env: TOX_ENV=pypy
+        env: TOX_ENV=pypy DOCOV=false
       - python: 3.6
-        env: TOX_ENV=flake8
+        env: TOX_ENV=flake8 DOCOV=false
 
-install: pip install -U tox-travis funcsigs coveralls pytest
+install: 
+  - pip uninstall -y funcsigs || true
+  - pip install -U tox-travis coveralls pytest
+  - pip install -r requirements_dev.txt
 
 script: 
   - tox -e $TOX_ENV
-  - coverage run --source modpipe -m py.test
+  - ($DOCOV && ccoverage run --source modpipe -m py.test) || true
 
 after_success: coveralls
 
