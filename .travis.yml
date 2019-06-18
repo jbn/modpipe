@@ -1,15 +1,14 @@
+dist: xenial
 sudo: false
 language: python
 matrix:
     include:
-      - python: 2.7
-        env: TOX_ENV=py27 DOCOV=false
       - python: 3.5
         env: TOX_ENV=py35 DOCOV=true
       - python: 3.6
         env: TOX_ENV=py36 DOCOV=false
-      - python: pypy
-        env: TOX_ENV=pypy DOCOV=false
+      - python: 3.7
+        env: TOX_ENV=py37 DOCOV=false
       - python: 3.6
         env: TOX_ENV=flake8 DOCOV=false
 

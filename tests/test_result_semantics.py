@@ -1,5 +1,5 @@
 import pytest
-from modpipe.modpipe_impl import Result, Done, SkipTo
+from modpipe import Result, Done, SkipTo
 
 
 def test_single_arg_result():
@@ -8,10 +8,10 @@ def test_single_arg_result():
 
     def f(x):
         assert x == 1
-        return 1
+        return 2
 
     res_1 = res_0.apply_to(f, 1)
-    assert res_1.args == 1
+    assert res_1.args == 2
 
 
 def test_tuple_arg_result():
@@ -75,3 +75,13 @@ def test_skip_to():
     assert res_0.args == (1, 2)
     assert res_0.apply_to(f, 2) is res_0
     assert res_0.apply_to(g, 2).args == 3
+
+
+def test_result_repr():
+    def g(): pass
+
+    assert repr(Result(1)) == 'Result(1)'
+    assert repr(Done(2)) == 'Done(2)'
+    assert repr(SkipTo(g, 91)) == 'SkipTo(91)'
+
+
