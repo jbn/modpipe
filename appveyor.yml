@@ -1,14 +1,13 @@
 environment:
   matrix:
-    - PYTHON: "C:\\Python27"
-      TOX_ENV: "py27"
-
     - PYTHON: "C:\\Python35"
       TOX_ENV: "py35"
 
     - PYTHON: "C:\\Python36"
       TOX_ENV: "py36"
 
+    - PYTHON: "C:\\Python37"
+      TOX_ENV: "py37"
 
 install:
   - "%PYTHON%/Scripts/easy_install -U pip"
